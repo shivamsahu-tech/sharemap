@@ -52,6 +52,6 @@ The project is deployed on **Vercel**. You can check out the live version at: [S
 ## **📧 Contact**  
 Feel free to reach out for any suggestions or collaboration opportunities!
 
-- **X**: [youremail@example.com](https://x.com/shsa_X)
-- **LinkedIn**: [Your LinkedIn Profile](https://linkedin.com/in/shsax)
-- **GitHub**: [Your GitHub Profile](https://github.com/shsa-x)
+- **X**: [click!](https://x.com/shsa_X)
+- **LinkedIn**: [click!](https://linkedin.com/in/shsax)
+- **GitHub**: [click!](https://github.com/shsa-x)
