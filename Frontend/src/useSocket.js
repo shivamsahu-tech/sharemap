@@ -8,7 +8,7 @@ import { decryptData, encryptData } from './Crypto.js';
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export function useSocket() {
-  const [locationData, setLocationData] = useState({});
+  // const [locationData, setLocationData] = useState({});
   const socketRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -16,7 +16,7 @@ export function useSocket() {
     socketRef.current = io(SERVER_URL);
 
     socketRef.current.on('connect', () => {
-      console.log("A User Connected");
+      // console.log("A User Connected");
     });
 
     socketRef.current.on("down_location", (encryptedData) => {
@@ -53,7 +53,7 @@ export function useSocket() {
       roomId, 
       user
     });
-    console.log("joinRoom function called successfully");
+    // console.log("joinRoom function called successfully");
   };
 
   const leaveRoom = (roomId, user) => {
@@ -61,7 +61,7 @@ export function useSocket() {
       roomId, 
       user
     });
-    console.log("leaveRoom function called successfully");
+    // console.log("leaveRoom function called successfully");
   };
 
 
