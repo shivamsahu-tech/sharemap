@@ -23,10 +23,10 @@ export function useSocket() {
       // console.log("we reached here")
       // console.log(`Received Data: `, data);
       // here dispatch to the location
-      console.log("received data: ",encryptedData)
+      // console.log("received data: ",encryptedData)
       try {
         const data = decryptData(import.meta.env.VITE_SECRET_KEY, encryptedData); // Decrypt the data
-        console.log("decrypted data: ", data); // Log decrypted data
+        // console.log("decrypted data: ", data); // Log decrypted data
         dispatch(updateGroup(data)); // Update the state with the decrypted data
       } catch (error) {
           console.error("Decryption failed:", error); // Handle errors

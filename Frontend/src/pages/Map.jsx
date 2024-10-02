@@ -160,7 +160,7 @@ function Map() {
                     roomId: joinCode
                 };
  
-                console.log(payload)
+                // console.log(payload)
                 socketRef.current.emit('up_location', payload);
             };
     
