@@ -9,6 +9,8 @@ ShareMap is a full-stack web application designed to allow you and your friends 
 
 ![Alt Text](./home.png)
 ![Alt Text](./map.png)
+[Watch the video](https://drive.google.com/file/d/1Sq7HaFR4Xq8I68gw_eKCIN12GQDDJkXn/view?usp=drive_link)
+
 
 
 ## **🛠️ Tech Stack**
