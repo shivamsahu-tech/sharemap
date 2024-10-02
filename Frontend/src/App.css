@@ -1,0 +1,423 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:'Roboto', sans-serif;
+  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  background-color: #F3F4F6;
+  /* min-width: 330px;
+  min-height: 700px; */
+
+
+}
+
+.header {
+  background-color: #4f86c9;
+  
+}
+
+.button button {
+  transition: background-color 0.3s, box-shadow 0.3s;
+  padding: 4px 12px;
+}
+
+.getstarted{
+  background-color: #F97316;
+}
+
+.page1 {
+  min-height: 85vh;
+  min-width: 90vw;
+  color: #1F2937 ;  
+}
+
+.description > h1{
+  font-family: 'Poppins', sans-serif;
+  color: #305BCA;
+}
+
+.desc-imgs > div{
+   width: 25vw;
+   height: 25vw;
+   border: 2px solid rgb(64, 62, 62);
+   border-radius: 10px;
+   background-repeat: none;
+   background-size: cover;
+   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+.img1{
+  background-image: url("https://res.cloudinary.com/dfl8h4on4/image/upload/v1723459482/img1_vafst1.png");
+  transform: rotate(-5deg);
+}
+
+.img2{
+  background-image: url("https://res.cloudinary.com/dfl8h4on4/image/upload/v1723459501/img2_hokvkt.png");
+  transform: rotate(10deg);
+  position: relative;
+  margin: 25% 0 0 10%;
+}
+
+
+.img1{
+  transform: rotate(-5deg);
+  position: absolute;
+  z-index: 1;
+  margin-left: -5%;
+}
+
+.img2{
+  transform: rotate(10deg);
+} 
+
+.page2 {
+  min-height: 75vh;
+  min-width: 90vw;
+  
+}
+
+.page2  div{
+  width: 49%;
+  border-radius: 8px;
+} 
+
+.page2 button{
+  background-color: #305BCA;
+}
+
+
+.info1 {
+  background-image: url("https://res.cloudinary.com/dfl8h4on4/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1723473911/img-1_g3imi2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-position-y: -4px;
+}
+
+.info2 {
+  background-image: url("https://res.cloudinary.com/dfl8h4on4/image/upload/v1723473889/img-2_zdnpih.webp");
+  background-size: cover;
+  background-position: center;
+  background-position-y: 4px;
+}
+
+.info3 {
+  background-image: url("https://res.cloudinary.com/dfl8h4on4/image/upload/v1723473920/img-3_yuguo3.webp");
+  background-size:cover;
+  background-position: center;
+}
+
+.page3{
+  height: 75vh;
+  width: 90vw;
+  box-sizing: content-box;
+}
+
+
+.card{
+  min-width: 20rem;
+  min-height: 20rem;
+  width: 30%;
+  height: auto;
+  position: relative;
+} 
+
+.cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page3 > div{
+  width: 32%;
+}
+
+.info{
+  width: 100%;
+  height: 65%;
+}
+
+.cards-content{
+  width: 80%;
+  height: 90%;
+}
+
+.cards-content > div {
+  width: 100%;
+  height: 60%;
+}
+
+
+.footer{
+  background-color: #242329;
+}
+
+.author{
+  line-height: 1rem;
+  margin-bottom: -2rem;
+}
+
+.popup{
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.81); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: visibility 0s, opacity 0.3s ease-in-out;
+}
+
+.notification{
+  position: fixed;
+  z-index: 10;
+  right: 1rem;
+  top: 5rem;
+}
+
+
+/* .btn-login{
+  background-color: #305BCA;
+}
+
+.login{
+  visibility: hidden;
+} */
+
+.register{
+  visibility: hidden;
+}
+
+.join{
+  visibility: hidden;
+}
+
+.x{
+  position: absolute;
+  right: 10px;
+  z-index: 1;
+}
+
+.map-maze{
+  width: 100vw;
+  height: 100vh;
+}
+
+
+
+.map-btn button:first-child{
+  background-color:#DB554C;
+}
+
+.map{
+  border: 2px solid rgb(64, 62, 62);
+  height: 75%;
+  position: relative;
+}
+
+button:hover{
+  opacity: 0.9;
+}
+
+
+
+
+
+.select-map{
+    position: absolute;
+    bottom: 0px;
+    z-index: 1100;
+    margin: 10px;
+}
+
+.my-loc{
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    bottom: 15px;
+    right: 1px;
+    z-index: 1100;
+    margin: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+
+
+@media  (max-width: 550px) {
+       .button{
+        font-size: small;
+       }
+       .button button {
+        padding: 3px 6px;
+       }
+
+       .page1{
+        display: flex;
+        flex-direction: column-reverse;
+       }
+       .page1 > div {
+        flex: 1;
+        width: 100%;
+        height: auto;
+       }
+
+       .desc-imgs{
+        margin-top: 2rem;
+       }
+
+       .desc-imgs > div {
+        width: 50vw;
+        height: 50vw;
+       }
+
+       .description{
+        padding: 2rem;
+       }
+
+       .page2 div {
+        padding: 2rem;
+       }
+
+       .page2  input{
+        margin-left: -2rem;
+        width: 10rem;
+       }
+
+       .page2 h1{
+        margin-top: 2rem;
+       }
+
+       .card{
+        min-width: 18rem;
+        min-height: 15rem;
+       }
+
+       .join  input{
+        width: 10rem;
+
+       }
+
+
+}
+
+
+@media (max-width: 1000px) {
+  .page2{
+    display: flex;
+    flex-direction: column;
+  }
+  .page2 > div{
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .map {
+    height: 75%;
+  }
+}
+
+
+ @media (min-width: 550px) and (max-width: 900px){
+  
+  .page1{
+    display: flex;
+    flex-direction: column-reverse;
+   }
+   .page1 > div {
+    flex: 1;
+    width: 100%;
+    height: auto;
+   }
+
+   .desc-imgs > div {
+    width: 35vw;
+    height: 35vw;
+   }
+
+   .description{
+    padding: 3rem;
+   }
+
+   .desc-imgs{
+    margin-top: 3rem;
+   }
+} 
+
+@media (max-width: 950px) {
+
+  .page3{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cards-content{
+    width: 90%;
+    height: 80%;
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  .cards-content > div{
+    width: 50%;
+    height: 100%;
+    border: 2px solid orange;
+    
+  }
+
+  .cards-content > p {
+    width: 45%;
+    margin: 1rem;
+    margin-top: 2rem;
+  }
+
+  
+
+  .page3 > div{
+    width: 100%;
+    height:  50vh;
+  }
+}
+
+@media (max-width:500px) {
+
+  html{
+    font-size: 14px;
+  }
+
+   .page3 > div{
+    width: 100%;
+    height: 70vh;
+
+
+  .cards-content{
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  .cards-content > div{
+    width: 100%;
+    height: 70%;    
+  }
+
+  .cards-content > p {
+    width: 100%;
+    height: 30%;
+    margin: 0;
+  }
+
+  }
+}
+
