@@ -7,6 +7,9 @@
 ## **📋 Project Overview**  
 ShareMap is a full-stack web application designed to allow you and your friends to share real-time locations of all group members on a single interactive map. The project also features an in-app group messaging system, where any member can send messages that pop up at their location icon, making it incredibly useful during group travels, event coordination, or group activities.
 
+![Alt Text](./home.png)
+![Alt Text](./map.png)
+
 
 ## **🛠️ Tech Stack**
 
