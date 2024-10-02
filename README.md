@@ -54,4 +54,3 @@ Feel free to reach out for any suggestions or collaboration opportunities!
 
 - **X**: [click!](https://x.com/shsa_X)
 - **LinkedIn**: [click!](https://linkedin.com/in/shsax)
-- **GitHub**: [click!](https://github.com/shsa-x)
