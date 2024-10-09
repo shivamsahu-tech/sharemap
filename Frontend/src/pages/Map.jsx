@@ -137,30 +137,30 @@ function Map() {
             }
     
             if (popupShown) {
-                showPopup("Wait A while...", "blue");
+                showPopup("Wait a while...", "blue");
                 setPopupShown(false);
             }
     
             const successCallback = (livePosition) => {
-
                 const locationData = {
-                            name: name,
-                            lat: livePosition.coords.latitude,
-                            long: livePosition.coords.longitude,
-                            isActive: true,
-                        };
-
+                    name: name,
+                    lat: livePosition.coords.latitude,
+                    long: livePosition.coords.longitude,
+                    isActive: true,
+                };
+    
+                // Update Redux state with the current location
                 dispatch(setMyLoc({
                     lat: livePosition.coords.latitude,
                     long: livePosition.coords.longitude,
                 }));
     
+                // Prepare and send encrypted location data via socket
                 const payload = {
                     locationData: encryptData(import.meta.env.VITE_SECRET_KEY, locationData),
-                    roomId: joinCode
+                    roomId: joinCode,
                 };
- 
-                // console.log(payload)
+    
                 socketRef.current.emit('up_location', payload);
             };
     
@@ -175,19 +175,22 @@ function Map() {
                 socketRef.current.emit('up_location', locationData);
             };
     
-            // Start watching the position
-            const watchId = navigator.geolocation.watchPosition(successCallback, errorCallback, {
-                enableHighAccuracy: true
-            });
+            // Send location every 4 seconds
+            const intervalId = setInterval(() => {
+                navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+                    enableHighAccuracy: true,
+                });
+            }, 4000); 
     
+
             return () => {
-                // Stop watching the position
-                navigator.geolocation.clearWatch(watchId);
+                clearInterval(intervalId);
             };
         } else {
             showPopup("Login First", "red");
         }
     }, [dispatch, name, socketRef, joinCode]);
+    
     
 
 
