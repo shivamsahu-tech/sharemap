@@ -21,6 +21,7 @@ app.use(cookieParser())
  * routers
  */
 import userRoutes from "./routes/user.routes.js"
+import { findPath } from "./controller/path.controller.js";
 
 
 app.use("/users", userRoutes)
@@ -28,6 +29,11 @@ app.use("/users", userRoutes)
 app.get("/", (req, res) => {
     res.send("All is well!")
 })
+
+
+app.post("/find-path", findPath)
+
+  
 
 
 

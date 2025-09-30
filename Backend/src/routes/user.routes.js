@@ -5,7 +5,6 @@ import { validateUser } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-
 router.route("/register").post(
     registerUser
 )
