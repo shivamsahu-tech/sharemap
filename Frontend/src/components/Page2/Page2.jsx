@@ -14,16 +14,16 @@ function Page2() {
     const [joinCode, setJoinCode] = useState("")
 
     function generateStringWithSH() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const chars = '0123456789';
         const shPosition = Math.floor(Math.random() * 9); // Position to insert "sh"
         
         let randomString = '';
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 6; i++) {
             randomString += chars.charAt(Math.floor(Math.random() * chars.length));
         }
     
         // Insert "sh" at a random position in the 10-character string
-        const finalString = randomString.slice(0, shPosition) + 'sh' + randomString.slice(shPosition);
+        const finalString = randomString.slice(0, shPosition) + '25' + randomString.slice(shPosition);
         
         return finalString;
     }
@@ -68,7 +68,7 @@ function Page2() {
             dispatch(registerVisFunc())
         } 
         else {
-            if(!(joinCode.includes("sh") && joinCode.length == 12 )){
+            if(!(joinCode.includes("25") && joinCode.length == 12 )){
                 showPopup("Invalid Join Code!", "red")
                 return
             }
