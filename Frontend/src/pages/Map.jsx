@@ -16,6 +16,7 @@ function Map() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [showPathFinder, setShowPathFinder] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -153,9 +154,19 @@ function Map() {
       dispatch(resetGroup());
     };
 
+    // Handle viewport height changes for mobile browsers
+    const handleResize = () => {
+      setViewportHeight(window.innerHeight);
+    };
+
     window.addEventListener("beforeunload", alertUser);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+    
     return () => {
       window.removeEventListener("beforeunload", alertUser);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
     };
   }, [joinCode, user]);
 
@@ -248,10 +259,10 @@ function Map() {
   return (
     <>
       <Popup />
-      <div className='flex flex-col h-screen'>
+      <div className='flex flex-col overflow-hidden' style={{ height: `${viewportHeight}px` }}>
         <Header />
 
-        <div className='flex-1 relative'>
+        <div className='flex-1 relative overflow-hidden'>
           
           {/* My Location Button */}
           <div
@@ -438,10 +449,10 @@ function Map() {
           <MapComponent mapLayer={mapLayer} mapRef={mapRef} />
 
           {/* Message Input - Bottom Center */}
-          <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] bg-white rounded-lg shadow-lg p-2 flex items-center gap-2'>
+          <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] border-gray-500 bg-white border-[1px] rounded-lg shadow-lg p-2 flex items-center gap-2'>
             <input 
               type="text"
-              className='bg-transparent border-b-2 border-gray-300 px-3 py-2 outline-none text-sm'
+              className='bg-transparent border-b-2 border-gray-500 px-3 py-2 outline-none text-sm'
               spellCheck="false"
               placeholder='Send message...'
               value={msg}
@@ -452,7 +463,7 @@ function Map() {
             <button
               onClick={sendMsg}
               disabled={!msg.trim()}
-              className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-90 disabled:cursor-not-allowed"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
