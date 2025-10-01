@@ -68,7 +68,7 @@ function Page2() {
             dispatch(registerVisFunc())
         } 
         else {
-            if(!(joinCode.includes("25") && joinCode.length == 12 )){
+            if(!(joinCode.includes("25") && joinCode.length == 8 )){
                 showPopup("Invalid Join Code!", "red")
                 return
             }
