@@ -1,194 +1,187 @@
-import React, {useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { joinVisFunc, popupData, popupVisFunc } from '../../features/visibilitySlice'
-import { useNavigate } from 'react-router-dom'
-import { setMyName } from '../../features/locationSlice'
-import Popup from '../Popup/Popup'
-import Button from '../Button/Button'
-import { useSocket } from '../../useSocket'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { joinVisFunc, popupData, popupVisFunc } from '../../features/visibilitySlice';
+import { useNavigate } from 'react-router-dom';
+import { setMyName } from '../../features/locationSlice';
+import Popup from '../Popup/Popup';
+import Button from '../Button/Button';
+import { useSocket } from '../../useSocket';
 
 function Join() {
-
-  const dispatch = useDispatch()
-   const {leaveRoom} =  useSocket()
-
-  const x_clicked = () => {
-    dispatch(joinVisFunc())
-  }
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const joinMapBtn = () => {
-    // setMyName
-    dispatch(joinVisFunc())
-    navigate("/map")
-    
-  }
-
+  const { leaveRoom } = useSocket();
   
-
-  const joincode =  useSelector(state => state.locations.joinCode)
-  const joinurl = useSelector(state => state.locations.joinURL)
-  const user = useSelector(state => state.locations.user)
-
-    const showPopup = (message, color) => {
-   
-      dispatch(popupData({
-        message: message,
-        color: color
-      }))
-      setTimeout(() => {
-        dispatch(popupVisFunc())
-      }, 3000);
-      dispatch(popupVisFunc())
-    }
+  const [copiedField, setCopiedField] = useState(null);
   
-    const copyCodeBtn = () => {
-      navigator.clipboard.writeText(joincode)
-      showPopup("Copied to Clipboard", "blue")
-    }
+  const joincode = useSelector(state => state.locations.joinCode);
+  const joinurl = useSelector(state => state.locations.joinURL);
+  const user = useSelector(state => state.locations.user);
+  const joinVisibility = useSelector(state => state.visibility.joinVisibility);
 
-    const copyUrlBtn = () => {
-      navigator.clipboard.writeText(joinurl)
-      showPopup("Copied to Clipboard", "blue")
-    }
+  const handleClose = () => {
+    dispatch(joinVisFunc());
+  };
 
-    useEffect(() => {
-      
-      const lastPage = localStorage.getItem("lastVisitedPage")
-      if(lastPage === "map"){
-        // console.log("room leaved from map")
-        leaveRoom(joincode, user)
-      }
-      localStorage.removeItem("lastVisitedPage")
+  const showPopup = (message, color) => {
+    dispatch(popupData({ message, color }));
+    dispatch(popupVisFunc());
+    setTimeout(() => {
+      dispatch(popupVisFunc());
+    }, 3000);
+  };
+
+  const handleCopy = async (text, fieldName) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(fieldName);
+      showPopup("Copied to clipboard!", "green");
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      showPopup("Failed to copy", "red");
+    }
+  };
+
+  const handleJoinMap = () => {
+    dispatch(joinVisFunc());
+    navigate("/map");
+  };
+
+  useEffect(() => {
+    const lastPage = localStorage.getItem("lastVisitedPage");
+    if (lastPage === "map") {
+      leaveRoom(joincode, user);
+    }
+    localStorage.removeItem("lastVisitedPage");
   }, [location]);
+
+  if (joinVisibility !== 'visible') return null;
 
   return (
     <>
-    <Popup/>
-    <div className={` join popup ${useSelector(state => state.visibility.joinVisibility)}`}  >  
-      <div 
-          className=' rounded-md card flex flex-col justify-between bg-[#ced4da] items-center relative' 
+      <Popup />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
+        <div 
+          className="absolute inset-0" 
+          onClick={handleClose}
+          aria-hidden="true"
+        />
+
+        <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all animate-slideUp">
+          <button
+            onClick={handleClose}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Close"
           >
-              <span className=' text-2xl hover:cursor-pointer absolute right-2' 
-              onClick={x_clicked}
-              >×</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
 
-            <div className='text-3xl font-bold mt-5 flex flex-col items-center' >
-             <img className='w-16' src="https://res.cloudinary.com/dfl8h4on4/image/upload/v1727085429/share_akcqet.png" alt="" />
-            <h1 className='text-base font-thin' >share it with friends.🙂</h1>
-             </div>
-
-
-              <div 
-              className='w-full pt-6 pb-10 px-10' 
-              >
-
-                <div className=' bg-white px-3 py-2 rounded-2xl mt-4 text-[#394958] flex flex-col justify-center items-start border-2 ' >
-                      <h2 
-                      className='text-xl font-semibold' 
-                      >Join URL</h2>
-                      <div className='w-full flex ' >
-                          <input 
-                          type="text"
-                          value={joinurl}
-                          disabled
-                          className='flex-1 w-[80%] border-b-2 border-black focus:outline-none bg-transparent mr-1 px-2  text-[#282c30] ' 
-                          spellCheck={false}
-                          />
-                          <i class="fa-solid fa-copy text-xl hover:cursor-pointer"
-                          onClick={copyUrlBtn}
-                          ></i>
-                      </div>
-                </div>
-
-
-                <div className=' bg-white px-3 py-2 rounded-2xl mt-4 text-[#394958] flex flex-col justify-center items-start border-2 ' >
-                      <h2 
-                      className='text-xl font-semibold' 
-                      >Join Code</h2>
-                      <div className='w-full flex ' >
-                          <input 
-                          type="text"
-                          value={joincode}
-                          disabled
-                          className='flex-1 w-[80%] border-b-2 border-black focus:outline-none bg-transparent mr-1 px-2  text-[#282c30] ' 
-                          spellCheck={false}
-                          />
-                          <i class="fa-solid fa-copy text-xl hover:cursor-pointer"
-                          onClick={copyCodeBtn}
-                          ></i>
-                      </div>
-                </div>
-
-                <Button method={joinMapBtn} title={"Join Map"} bgc={"bg-[#0276FF]"} />
-
-
-
+          <div className="pt-8 pb-6 px-8 text-center border-b border-gray-100">
+            <div className="flex justify-center mb-3">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <img 
+                  className="w-10 h-10" 
+                  src="https://res.cloudinary.com/dfl8h4on4/image/upload/v1727085429/share_akcqet.png" 
+                  alt="ShareMap Logo" 
+                />
               </div>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">Share with Friends</h2>
+            <p className="text-sm text-gray-500 mt-1">Copy and share to invite others</p>
+          </div>
 
-              
+          <div className="p-8 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Join URL</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={joinurl}
+                  disabled
+                  className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg text-gray-700 font-mono"
+                />
+                <button
+                  onClick={() => handleCopy(joinurl, 'url')}
+                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {copiedField === 'url' ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
 
-                
-        {/* <div 
-        className=' rounded-md card flex flex-col justify-between bg-slate-500 items-center' 
-        >
-             <span className='x text-xl hover:cursor-pointer'
-             onClick={x_clicked}
-              >×</span>
-
-             <h1 className='text-2xl font-bold mt-2' >Join Credentials</h1>
-
-             <div 
-             className='w-full p-8 input ' 
-             >
-                <div>
-                    <h2 
-                    className='text-xl font-semibold py-2 -mx-2' 
-                    >Group URL:</h2>
-                    <input 
-                    disabled
-                    value={joinurl}
-                    className='-ml-3 p-1.5 px-2 bg-white text-blue-800 border-l-2 border-t-2 border-b-2 border-black focus:outline-none rounded-s-md w-auto '
-                    type="text" 
-                    />
-
-                    <button 
-                    className='p-1.5 px-3 text-white rounded-e-md border-t-2 border-r-2 border-b-2 mb-2 border-black'
-                    onClick={copyUrlBtn}
-                    >copy</button>
-                </div>
-
-                <div>
-                    <h2 
-                    className='text-xl font-semibold py-2 -mx-2' 
-                    >Group Code:</h2>
-                    <input 
-                    disabled
-                    value={joincode}
-                    className='-ml-3 p-1.5 px-2 border-l-2 border-t-2 border-b-2 text-blue-800 bg-white border-black focus:outline-none rounded-s-md w-auto '
-                    type="text" 
-                    />
-
-                    <button 
-                    className='p-1.5 px-3 text-white rounded-e-md border-t-2 border-r-2 border-b-2 border-black'
-                    onClick={copyCodeBtn}
-                    >copy</button>
-                </div>
-                
-
-             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Join Code</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={joincode}
+                  disabled
+                  className="flex-1 px-3 py-2 text-lg bg-gray-50 border border-gray-300 rounded-lg text-gray-800 font-bold font-mono text-center"
+                />
+                <button
+                  onClick={() => handleCopy(joincode, 'code')}
+                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {copiedField === 'code' ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
 
             <button
-            className=' text-white text-xl font-semibold p-1 px-8 rounded-md btn-login mb-4'
-            onClick={joinMapBtn}
-            >Join Map</button>
-                */}
-        </div> 
-    </div> 
+              onClick={handleJoinMap}
+              className="w-full mt-6 py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-200 hover:scale-[1.02]"
+            >
+              Join Map
+            </button>
+          </div>
+        </div>
 
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          @keyframes slideUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out;
+          }
+          
+          .animate-slideUp {
+            animation: slideUp 0.3s ease-out;
+          }
+        `}</style>
+      </div>
     </>
-  )
+  );
 }
 
-export default Join
+export default Join;
