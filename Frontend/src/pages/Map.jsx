@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { Header, MapComponent, Popup } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeUser, resetGroup, setMyLoc } from '../features/locationSlice';
@@ -17,6 +17,8 @@ function Map() {
   const [showMembers, setShowMembers] = useState(false);
   const [showPathFinder, setShowPathFinder] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  const [path, setPath] = useState([]);
+  const [isHidePathVisible, setIsHidePathVisible] = useState(false)
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,6 +31,12 @@ function Map() {
   const allMembers = useSelector(state => state.locations.group);
   
   const { socketRef, joinRoom, leaveRoom } = useSocket();
+
+
+  const hidePath  = () => {
+    setPath([]);
+    setIsHidePathVisible(false);
+  }
 
   const changeLayer = (value) => {
     setMap(value);
@@ -112,7 +120,7 @@ function Map() {
     setMenuOpen(false);
   };
 
-  const findPath = (targetMember) => {
+  const findPath = async (targetMember) => {
     if (!user) {
       showPopup("Login First", "red");
       return;
@@ -128,22 +136,42 @@ function Map() {
       return;
     }
 
-    // Emit socket event to backend to calculate shortest path
-    socketRef.current.emit("find_path", {
-      roomId: joinCode,
-      from: {
-        name: user,
-        lat: locationObj.lat,
-        long: locationObj.long
-      },
-      to: {
-        name: targetMember.name,
-        lat: targetMember.lat,
-        long: targetMember.long
-      }
-    });
-
     showPopup(`Finding path to ${targetMember.name}...`, "blue");
+
+    const payload = {
+        source: {
+            lat: allMembers[user].lat,
+            lng: allMembers[user].long
+        },
+        destination: {
+            lat: targetMember.lat,
+            lng: targetMember.long
+        }
+    }
+
+    console.log(payload)
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/find-path`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+    // console.log("find path data")
+    // console.log(allMembers[user])
+    // console.log(targetMember)
+    // console.log(payload)
+
+    const result = await response.json()
+    const coordinates = [
+      { lat: allMembers[user].lat, lng: allMembers[user].long }, 
+      ...result.data, 
+      { lat: targetMember.lat, lng: targetMember.long }
+    ];
+
+    console.log("result from find path : ", coordinates)
+    
+    setPath([...coordinates]);
+    setIsHidePathVisible(true);
     setShowPathFinder(false);
     setMenuOpen(false);
   };
@@ -446,7 +474,15 @@ function Map() {
             </div>
           )}
 
-          <MapComponent mapLayer={mapLayer} mapRef={mapRef} />
+          <div
+            className={`absolute top-36 right-4 z-[1000] p-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-md hover:cursor-pointer ${isHidePathVisible ? 'block' : 'hidden'}`}
+            title='hide path'
+            onClick={hidePath}
+          > 
+            <img src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-cross-icon-png-image_956622.jpg" alt="My Location" className="w-6 h-6" />
+          </div>
+
+          <MapComponent mapLayer={mapLayer} mapRef={mapRef} pathCoordinates={path} />
 
           {/* Message Input - Bottom Center */}
           <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] border-gray-500 bg-white border-[1px] rounded-lg shadow-lg p-2 flex items-center gap-2'>
